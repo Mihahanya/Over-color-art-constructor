@@ -1,0 +1,83 @@
+body {
+	margin: 0;
+	background-color: hwb(777deg 50% 50%);
+}
+
+svg {
+	position: fixed;
+	right: 0;
+	top: 0;
+	height: 100%;
+	width: 100%;
+	z-index: -1;
+}
+
+#menu {
+	position: fixed;
+	left: 0;
+	right: 0;
+	height: 100%;
+	width: 70px;
+	background-color: rgba(255, 255, 255, 0.1);
+
+	padding: 20px;
+}
+
+#menu span {
+	font-size: 0.9em;
+}
+
+#menu p {
+	margin-top: 20px;
+	font-size: 0.8em;
+}
+
+input[type="number"] {
+	margin-top: 10px;
+	padding: 3px 7px;
+	width: -webkit-fill-available;
+	
+	background-color: #00000000;
+	border: 2px solid #000;
+	border-style: solid;
+	
+	font-size: 1.2em;
+	font-family: monospace;
+}
+input[type="number"]:focus-visible {
+	border-color: #fff;
+	outline: 0;
+}
+
+.storage-menu {
+	margin-top: 10px;
+	padding: 5px;
+	width: -webkit-fill-available;
+	display: block;
+	
+	background-color: #00000000;
+	border: 2px solid #000;
+	border-style: solid;
+	
+	font-size: 1em;
+	font-family: monospace;
+	font-weight: bolder;
+	text-align: center;
+
+	cursor: pointer;
+}
+.storage-menu:hover {
+	background-color: rgba(255, 255, 255, 0.2)
+}
+
+
+footer {
+	position: absolute;
+	bottom: 10px;
+	right: 20px;
+	color: hwb(777deg 50% 50%);
+}
+a:-webkit-any-link {
+    color: hwb(777deg 50% 50%);
+}
+

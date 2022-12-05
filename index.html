@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Abstraction Constructor</title>
+
+	<script src="fncs.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="main-style.css">
+	<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+</head>
+
+<body oncontextmenu="return false;">
+
+	<div id="menu">
+		<span>Color changes per second:</span>
+		<input id="periodicity" type="number" 
+			value="7" placeholder="color change per second..." step="1">
+
+		<p>
+			Left click - new figure. <br>
+			Right click - finish figure. <br>
+			Mouse wheel click - delete figure.
+		</p>
+
+		<button id="save" class="storage-menu">Save</button>
+
+		<input type="file" id="open" accept=".oca" hidden/>
+		<label for="open" class="storage-menu">Open</label>
+	</div>
+
+	<!-- TODO: RESCALING SVG -->
+	<svg id="main-canvas">	
+	</svg>
+
+	<footer> <a href="https:/github.com/Mihahanya"> 2022 Mihahanya </a> </footer>
+</body>
+
+<script>
+
+var current_id = 0
+var selected = false
+var x = y = 0
+var points = ''
+var color_change_per_second = 7
+var max_ccps=1000, min_ccps=0.3
+
+// Cursor and current corner of figure position
+
+$(document).mousemove(function(e) {
+	x = e.pageX
+	y = e.pageY
+
+	if (selected) {
+		$(`#figure${current_id}`).attr('points', points + ' ' + x + ',' + y)
+	}
+});
+
+// Creating and deleting figures
+
+$(document).on('mousedown', function(e) {
+	if (e.target.id == 'menu' || e.target.parentElement.id == 'menu') return;
+
+	// Left click - new figure or new point to figure
+	if (e.which === 1) {
+		points += x + ',' + y + ' '
+
+		// Create new figure
+		if (!selected) {
+			selected = true
+			var polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+			polygon.id = `figure${current_id}`; polygon.style = "fill-rule:evenodd"
+			$('#main-canvas').append(polygon);
+		}
+	}
+	// Right click - finish figure
+	else if (e.which === 3 && selected) {
+		selected = false
+		$(`#figure${current_id}`).attr('points', points)
+		current_id++
+		points = ''
+	}
+	// Mouse wheel click - delete figure
+	else if (e.which === 2 && e.target.nodeName == 'polygon') {
+		$(e.target).remove()
+		selected = false
+		points = ''
+	}
+});
+
+// Color changing
+
+$("#periodicity")
+	.on('keyup keydown change', function(e) {
+		// Color change value from 0.3 to 1000 changes per second 
+		color_change_per_second = Math.min(Math.max($(this).val(), min_ccps), max_ccps)
+
+		if (min_ccps <= $(this).val() && $(this).val() <= max_ccps) {
+			$(this).attr('style', '')
+		}
+		else {
+			$(this).attr('style', 'border-color: red;')
+		}
+	})
+	.focusout(function() {
+		$(this).attr('style', '')
+		$(this).val( Math.min(Math.max($(this).val(), min_ccps), max_ccps) )
+	});
+
+
+// Save painting
+
+const file_extension = '.oca' 	// OCA - over color art
+
+// TODO: interesting names
+$('#save').click(() => {
+	const d = new Date()
+	save_file(' ' + d.toJSON() + file_extension, JSON.stringify({art_data: $('#main-canvas').html(), ids: current_id, ccpm: color_change_per_second}))
+})
+
+// Load saved painting
+
+$('#open').change((e) => {
+	// var file_data = read_file(e.target.files[0])
+	// var data = JSON.parse(file_data)
+
+	// $('#main-canvas').html(data.art_data)
+	// current_id = data.ids
+	// $("#periodicity").val(data.ccpm); color_change_per_second = data.ccpm
+
+	var fr = new FileReader();
+	fr.onload = () => {
+		var data = JSON.parse(fr.result)
+		$('#main-canvas').html(data.art_data)
+		current_id = data.ids
+		$("#periodicity").val(data.ccpm)
+		color_change_per_second = data.ccpm
+	}	
+	fr.readAsText(e.target.files[0]);
+})
+
+// Timer
+
+setTimeout(change_color_step, 1000/7);
+function change_color_step() {
+	for (var i=0; i<=current_id; ++i) {
+		var r = random_num(255), g = random_num(255), b = random_num(255)
+		$(`#figure${i}`).attr('fill', `rgb(${r}, ${g}, ${b})`)
+	}
+
+    setTimeout(change_color_step, 1000/color_change_per_second); 
+}
+
+</script>
+
+</html>
