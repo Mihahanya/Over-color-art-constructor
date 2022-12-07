@@ -25,3 +25,32 @@ function read_file(file) {
 	fr.readAsText(file)
 	return res
 }
+
+function generate_name(str) {
+    const constant_sounds = 'qwrtpsdfghjklzxcvbnm'
+    const vowel_sounds = 'eyuioa'
+    var res = ''
+    
+    var sum = 0
+    for (var i=0; i<str.length; ++i) sum += str.charCodeAt(i)-31
+    var res_len = 7 + (sum % 5 - 2)
+
+    var hash = sum
+    sum = 0
+    for (var j=0; j<res_len; ++j) {
+        for (var i=j; i<str.length; i+=res_len) {
+            hash = (hash*1103515245 + 12345) % (2**32)
+            sum += str.charCodeAt(i)-31
+        }
+        
+        if (j % 2 == 0) 
+            res += constant_sounds[hash % constant_sounds.length]
+        else 
+            res += vowel_sounds[hash % vowel_sounds.length]
+
+        hash = sum
+        //sum = 0
+    }
+
+    return res
+}

@@ -36,6 +36,7 @@ input[type="number"] {
 	margin-top: 10px;
 	padding: 3px 7px;
 	width: -webkit-fill-available;
+	width: -moz-available;
 	
 	background-color: #00000000;
 	border: 2px solid #000;
@@ -49,10 +50,15 @@ input[type="number"]:focus-visible {
 	outline: 0;
 }
 
+.figure-checkbox {
+	font-size: 0.8em;
+}
+
 .storage-menu {
 	margin-top: 10px;
 	padding: 5px;
 	width: -webkit-fill-available;
+	width: -moz-available;
 	display: block;
 	
 	background-color: #00000000;
@@ -78,6 +84,9 @@ footer {
 	color: hwb(777deg 50% 50%);
 }
 a:-webkit-any-link {
+    color: hwb(777deg 50% 50%);
+}
+a:visited {
     color: hwb(777deg 50% 50%);
 }
 
