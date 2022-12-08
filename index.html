@@ -60,7 +60,7 @@ var color_change_per_second = 7
 var max_ccps=1000, min_ccps=0.3
 var draw_figure = 'polygon'
 
-const rootof2to2 = 2**0.5 / 2
+const rootof2by2 = 2**0.5 / 2
 
 // Cursor and current corner of figure position
 
@@ -73,8 +73,8 @@ $(document).mousemove(function(e) {
 			$(`#figure${current_id}`).attr('points', points + ' ' + mouse_x + ',' + mouse_y)
 		else if (draw_figure == 'ellipse')
 			$(`#figure${current_id}`)
-				.attr('rx', Math.abs(c_xy[0]-mouse_x)/rootof2to2)
-				.attr('ry', Math.abs(c_xy[1]-mouse_y)/rootof2to2)
+				.attr('rx', Math.abs(c_xy[0]-mouse_x)/rootof2by2)
+				.attr('ry', Math.abs(c_xy[1]-mouse_y)/rootof2by2)
 	}
 });
 
